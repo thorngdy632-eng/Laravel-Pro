@@ -19,10 +19,11 @@
                     <x-error-message :messages="$errors->all()" />
 
                     <form action="{{ route('categories.posts.update', [$category, $post]) }}" method="POST"
-                        class="space-y-6">
+                        class="space-y-6" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
+                        <!-- Title Field -->
                         <div>
                             <x-input-label for="title" :value="__('Title')" />
 
@@ -32,22 +33,51 @@
                             <x-input-error :messages="$errors->get('title')" class="mt-2" />
                         </div>
 
+                        <!-- Current & New Image Section -->
+                        <div>
+                            <x-input-label :value="__('Featured Image')" />
+
+                            @if ($post->image)
+                                <div class="my-2">
+                                    <p class="text-xs text-gray-500 mb-1">{{ __('Current Image:') }}</p>
+                                    <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}"
+                                        class="h-24 w-auto rounded-md object-cover border">
+                                </div>
+                            @endif
+
+                            <label class="block text-xs font-medium text-gray-600 mt-2 mb-1">
+                                {{ __('Replace Image (optional)') }}
+                            </label>
+                            
+                            <input id="image" type="file" name="image" accept="image/*"
+                                class="mt-1 block w-full text-sm text-gray-500
+                                       file:mr-4 file:py-2 file:px-4
+                                       file:rounded-md file:border-0
+                                       file:text-sm file:font-semibold
+                                       file:bg-indigo-50 file:text-indigo-600
+                                       hover:file:bg-indigo-100 cursor-pointer">
+
+                            <x-input-error :messages="$errors->get('image')" class="mt-2" />
+                        </div>
+
+                        <!-- Content Field -->
                         <div>
                             <x-input-label for="content" :value="__('Content')" />
 
                             <textarea id="content" name="content" rows="6" required
-                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('content', $post->content) }}</textarea>
+                                class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3">{{ old('content', $post->content) }}</textarea>
 
                             <x-input-error :messages="$errors->get('content')" class="mt-2" />
                         </div>
 
-                        <div class="flex gap-2">
+                        <!-- Form Buttons -->
+                        <div class="flex items-center gap-4">
                             <x-primary-button>
                                 {{ __('Update Post') }}
                             </x-primary-button>
 
                             <a href="{{ route('categories.posts.index', $category) }}"
-                                class="rounded-md bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-700">
+                                class="inline-flex items-center rounded-md bg-gray-500 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white hover:bg-gray-700 transition">
                                 {{ __('Cancel') }}
                             </a>
                         </div>

@@ -25,14 +25,15 @@
                 <div class="space-y-6 p-6 text-gray-900">
                     <x-flash-message :message="session('success')" />
 
-                    <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <!-- Meta Details Grid -->
+                    <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3 border-b border-gray-200 pb-6">
                         <div>
                             <dt class="text-xs font-medium uppercase tracking-wider text-gray-500">
                                 {{ __('Category') }}
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900">
                                 <a href="{{ route('categories.show', $category) }}"
-                                    class="text-indigo-600 hover:text-indigo-900">
+                                    class="text-indigo-600 hover:text-indigo-900 font-medium">
                                     {{ $category->name }}
                                 </a>
                             </dd>
@@ -57,8 +58,26 @@
                         </div>
                     </dl>
 
-                    <div class="border-t border-gray-200 pt-6 text-sm leading-6 text-gray-700">
+                    <!-- Post Image Preview -->
+                    @if ($post->image)
+                        <div class="overflow-hidden rounded-lg border bg-gray-50 flex justify-center">
+                            <img src="{{ asset('storage/' . $post->image) }}"
+                                 alt="{{ $post->title }}" 
+                                 class="max-h-[400px] w-full object-cover">
+                        </div>
+                    @endif
+
+                    <!-- Post Content -->
+                    <div class="text-sm leading-7 text-gray-700">
                         <p class="whitespace-pre-line">{{ $post->content }}</p>
+                    </div>
+
+                    <!-- Footer Back Link -->
+                    <div class="pt-4 border-t border-gray-200">
+                        <a href="{{ route('categories.posts.index', $category) }}" 
+                           class="text-sm font-medium text-indigo-600 hover:text-indigo-900">
+                            ← {{ __('Back to Posts') }}
+                        </a>
                     </div>
                 </div>
             </div>
